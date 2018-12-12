@@ -1,5 +1,4 @@
 import $ from "jquery";
 // import test from './test'
 
-
-import './scss/main.scss';
+import './assets/scss/main.scss';

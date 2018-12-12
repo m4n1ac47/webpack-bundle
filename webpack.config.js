@@ -37,9 +37,6 @@ const conf = {
                         {
                             loader: "postcss-loader",
                             options: { sourceMap }
-                        },{
-                            loader: "group-css-media-queries-loader",
-                            options: { sourceMap }
                         },
                         {
                             loader: "sass-loader",
@@ -47,6 +44,15 @@ const conf = {
                         }
                     ]
                 })
+            },
+            {
+                test: /\.(png|jpg|jpeg|gif|woff|woff2)$/,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {}
+                    }
+                ]
             }
         ]
     },
