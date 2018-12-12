@@ -5,14 +5,14 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const conf = {
     entry: './src/index.js',
     output: {
-        path: path.join(__dirname, './dist'),
+        path: path.resolve(__dirname, './dist'),
         filename: 'bundle.js',
         publicPath: '/dist/'
     },
     devServer: {
         overlay: true,
-        contentBase: './src',
-        watchContentBase: true
+        // contentBase: './src',
+        // watchContentBase: true
     },
     module: {
         rules: [
@@ -46,13 +46,26 @@ const conf = {
                 })
             },
             {
-                test: /\.(png|jpg|jpeg|gif|woff|woff2)$/,
-                use: [
-                    {
+                test: /\.(png|jpg|jpeg|gif)$/,
+                use: [{
                         loader: 'file-loader',
-                        options: {}
+                        options: {
+                            name: '[name].[ext]',
+                            publicPath: '../images/',
+                            outputPath: 'assets/images/'
+                        }
+                    }]
+            },
+            {
+                test: /\.(woff2|woff)$/,
+                use: [{
+                    loader: 'file-loader',
+                    options: {
+                        name: '[name].[ext]',
+                        publicPath: '../fonts/',
+                        outputPath: 'assets/fonts/'
                     }
-                ]
+                }]
             }
         ]
     },
