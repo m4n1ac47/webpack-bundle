@@ -1,6 +1,8 @@
+/* global require __dirname module */
 const path = require('path');
+const webpack = require('webpack');
 const sourceMap = true;
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
+// const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const conf = {
     entry: './src/index.js',
@@ -11,39 +13,48 @@ const conf = {
     },
     devServer: {
         overlay: true,
-        // contentBase: './src',
-        // watchContentBase: true
+        hot: true
+    },
+    resolve: {
+        extensions: ['.js', '.ts']
     },
     module: {
         rules: [
             {
-                test: /\.js/,
+                test: /\.(js|ts)$/,
                 use: [
                     {
-                        loader: "babel-loader",
-                        options: { presets: ["@babel/preset-env"] }
+                        loader: "babel-loader"
                     }
                 ]
             },
             {
                 test: /\.sass|scss$/,
-                use: ExtractTextPlugin.extract({
-                    // fallback: "style-loader",
-                    use: [
-                        {
-                            loader: "css-loader",
-                            options: { sourceMap }
-                        },
-                        {
-                            loader: "postcss-loader",
-                            options: { sourceMap }
-                        },
-                        {
-                            loader: "sass-loader",
-                            options: { sourceMap }
-                        }
-                    ]
-                })
+                use: [
+                    {   
+                        // loader: isDev ? "style-loader" : MiniCssExtractPlugin.loader
+                        loader: "style-loader"
+                    },
+                    {
+                        loader: "css-loader",
+                        options: { sourceMap }
+                    },
+                    {
+                        loader: "postcss-loader",
+                        options: { sourceMap }
+                    },
+                    {
+                        loader: "sass-loader",
+                        options: { sourceMap }
+                    }
+                ]
+            },
+            {
+                test: /\.css$/,
+                use: [
+                    "style-loader",
+                    "css-loader"
+                ]
             },
             {
                 test: /\.(png|jpg|jpeg|gif)$/,
@@ -51,7 +62,7 @@ const conf = {
                         loader: 'file-loader',
                         options: {
                             name: '[name].[ext]',
-                            publicPath: '../images/',
+                            publicPath: '../dist/assets/images/',
                             outputPath: 'assets/images/'
                         }
                     }]
@@ -62,7 +73,7 @@ const conf = {
                     loader: 'file-loader',
                     options: {
                         name: '[name].[ext]',
-                        publicPath: '../fonts/',
+                        publicPath: '../dist/assets/fonts/',
                         outputPath: 'assets/fonts/'
                     }
                 }]
@@ -70,7 +81,10 @@ const conf = {
         ]
     },
     plugins: [
-        new ExtractTextPlugin("assets/css/styles.css")
+        // new MiniCssExtractPlugin({
+        //     filename: 'bundle.css'
+        //   }),
+        new webpack.HotModuleReplacementPlugin()
     ]
 };
 
